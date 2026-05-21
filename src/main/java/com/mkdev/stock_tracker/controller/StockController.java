@@ -1,5 +1,6 @@
 package com.mkdev.stock_tracker.controller;
 
+import com.mkdev.stock_tracker.dto.StockOverviewResponse;
 import com.mkdev.stock_tracker.dto.StockResponse;
 import com.mkdev.stock_tracker.service.StockService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,11 @@ public class StockController {
     @GetMapping("/{stockSymbol}")
     public StockResponse getStock(@PathVariable String stockSymbol){
         return stockService.getStockForSymbol(stockSymbol.toUpperCase());
+    }
+
+    @GetMapping("/{stockSymbol}/overview")
+    public StockOverviewResponse getOverview(@PathVariable String stockSymbol){
+        return stockService.getStockOverviewForSymbol(stockSymbol.toUpperCase());
     }
 
 }

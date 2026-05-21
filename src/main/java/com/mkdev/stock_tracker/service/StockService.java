@@ -2,6 +2,7 @@ package com.mkdev.stock_tracker.service;
 
 import com.mkdev.stock_tracker.client.StockClient;
 import com.mkdev.stock_tracker.dto.AlphaVantageResponse;
+import com.mkdev.stock_tracker.dto.StockOverviewResponse;
 import com.mkdev.stock_tracker.dto.StockResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,4 +21,7 @@ public class StockService {
                 .build();
     }
 
+    public StockOverviewResponse getStockOverviewForSymbol(final String stockSymbol) {
+        return stockClient.getStockOverview(stockSymbol);
+    }
 }
