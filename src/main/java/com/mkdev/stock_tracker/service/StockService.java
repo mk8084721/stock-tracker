@@ -1,11 +1,12 @@
 package com.mkdev.stock_tracker.service;
 
 import com.mkdev.stock_tracker.client.StockClient;
-import com.mkdev.stock_tracker.dto.AlphaVantageResponse;
-import com.mkdev.stock_tracker.dto.StockOverviewResponse;
-import com.mkdev.stock_tracker.dto.StockResponse;
+import com.mkdev.stock_tracker.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,5 +24,26 @@ public class StockService {
 
     public StockOverviewResponse getStockOverviewForSymbol(final String stockSymbol) {
         return stockClient.getStockOverview(stockSymbol);
+    }
+
+    public List<DailyStockResponse> getStockHistoryForSymbol(final String symbol, int days) {
+        StockHistoryResponse response = stockClient.getStockHistory(symbol);
+
+        return response.timeSeries().entrySet().stream()
+                .limit(days)
+                .map(entry-> {
+                    var date = entry.getKey();
+                    var daily = entry.getValue();
+                    return new DailyStockResponse(
+                            date,
+                            Double.parseDouble(daily.open()),
+                            Double.parseDouble(daily.close()),
+                            Double.parseDouble(daily.high()),
+                            Double.parseDouble(daily.low()),
+                            Long.parseLong(daily.volume())
+                    );
+                })
+                .collect(Collectors.toList());
+
     }
 }
